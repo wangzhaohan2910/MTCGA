@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+<form action="/clear">
+    <input type="submit" />
+</form>
+<form action="/cmd" method="post">
+    <textarea name="area"></textarea>
+    <input type="submit" />
+</form>
+<pre>
+    {{s}}
+</pre>
+<img src="/screen.png" />
+<script>
+    setInterval(()=>{document.querySelector('img').src = "/screen.png?" + new Date().getTime();}, 300);
+</script>
+</body>
+</html>
