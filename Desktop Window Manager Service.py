@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from keyboard import on_press
-from io import BytesIO
 from PIL import ImageGrab
+from io import BytesIO
 from os import system
 
 app = Flask(__name__)
