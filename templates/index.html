@@ -1,2 +1,174 @@
-<!DOCTYPE html><html><body><form action="/clear"><input type="submit" value="清空"/></form><form action="/cmd" method="post"><textarea name="area"></textarea><input type="submit" value="提交"/></form><pre style="white-space:pre-wrap;">{{s}}</pre><img src="screen.bmp"/><script>setInterval(()=>{document.querySelector('img').src="/screen.bmp?"+Date.now()},200);</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyC 控制中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .transition-custom {
+                transition: all 0.3s ease;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-gray-800">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- 头部区域 -->
+        <header class="mb-8 text-center">
+            <h1 class="text-[clamp(1.8rem,4vw,2.8rem)] font-bold text-primary mb-2 text-shadow">
+                <i class="fa fa-terminal mr-2"></i>TinyC
+            </h1>
+            <p class="text-gray-600 text-lg">Make TinyC Great Again!</p>
+        </header>
 
+        <!-- 主内容区 -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 左侧控制区 -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- 命令输入表单 -->
+                <div class="bg-white rounded-xl shadow-md p-5 transition-custom hover:shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center text-dark">
+                        <i class="fa fa-code mr-2 text-primary"></i>命令执行
+                    </h2>
+                    <form action="/cmd" method="post" class="space-y-4">
+                        <div>
+                            <label for="command" class="block text-sm font-medium text-gray-700 mb-1">
+                                输入命令
+                            </label>
+                            <textarea
+                                id="command"
+                                name="area"
+                                rows="6"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-custom resize-none"
+                                placeholder="请输入要执行的命令..."
+                            ></textarea>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button
+                                type="submit"
+                                class="flex-1 bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-custom flex items-center justify-center"
+                            >
+                                <i class="fa fa-paper-plane mr-2"></i>提交
+                            </button>
+                            <button
+                                type="button"
+                                onclick="document.getElementById('command').value = ''"
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-custom"
+                            >
+                                <i class="fa fa-eraser"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="bg-white rounded-xl shadow-md p-5 transition-custom hover:shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center text-dark">
+                        <i class="fa fa-cogs mr-2 text-primary"></i>系统控制
+                    </h2>
+                    <div class="space-y-3">
+                        <form action="/clear">
+                            <button
+                                type="submit"
+                                class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-4 rounded-lg transition-custom flex items-center justify-center"
+                            >
+                                <i class="fa fa-trash mr-2"></i>清空输入记录
+                            </button>
+                        </form>
+
+                        <button
+                            onclick="window.location.reload()"
+                            class="w-full bg-secondary hover:bg-secondary/90 text-white font-medium py-3 px-4 rounded-lg transition-custom flex items-center justify-center"
+                        >
+                            <i class="fa fa-refresh mr-2"></i>刷新页面
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧显示区 -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- 屏幕显示 -->
+                <div class="bg-white rounded-xl shadow-md p-5 transition-custom hover:shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center text-dark">
+                        <i class="fa fa-desktop mr-2 text-primary"></i>屏幕监控
+                    </h2>
+                    <div class="border border-gray-200 rounded-lg overflow-hidden bg-gray-100">
+                        <img
+                            src="screen.bmp"
+                            alt="屏幕监控"
+                            class="w-full h-auto object-contain"
+                            id="screenMonitor"
+                        >
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2 text-right">
+                        自动刷新间隔: 200ms
+                    </p>
+                </div>
+
+                <!-- 输入记录 -->
+                <div class="bg-white rounded-xl shadow-md p-5 transition-custom hover:shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center text-dark">
+                        <i class="fa fa-history mr-2 text-primary"></i>输入记录
+                    </h2>
+                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 min-h-[120px] max-h-[300px] overflow-y-auto">
+                        <pre class="whitespace-pre-wrap text-gray-700 text-sm" id="inputHistory">{{ s }}</pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <p>© 2024 wangzhaohan2910</p>
+        </footer>
+    </div>
+
+    <script>
+        // 屏幕监控自动刷新
+        setInterval(() => {
+            const screenImg = document.getElementById('screenMonitor');
+            if (screenImg) {
+                screenImg.src = "/screen.bmp?" + Date.now();
+                // 添加加载动画效果
+                screenImg.style.opacity = "0.7";
+                screenImg.onload = () => {
+                    screenImg.style.opacity = "1";
+                };
+            }
+        }, 200);
+
+        // 输入框自动聚焦
+        document.addEventListener('DOMContentLoaded', () => {
+            const textarea = document.getElementById('command');
+            if (textarea) textarea.focus();
+        });
+    </script>
+</body>
+</html>
